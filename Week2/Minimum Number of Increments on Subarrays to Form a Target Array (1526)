@@ -1,0 +1,22 @@
+https://leetcode.com/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/submissions/1815891581/
+
+class Solution {
+    public int minNumberOperations(int[] target) {
+        Stack<Integer> st = new Stack<>();
+        int ans = 0;
+
+        for(int h : target){
+            if(st.isEmpty()){
+                ans += h;
+            }else if(st.peek() < h){
+                ans += h - st.peek();
+            }
+            while(!st.isEmpty() && st.peek() > h){
+                st.pop();
+            }
+            st.push(h);
+        }
+
+        return ans;
+    }
+}
