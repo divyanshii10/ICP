@@ -1,0 +1,38 @@
+https://leetcode.com/problems/sum-of-subarray-minimums/submissions/1807331348/
+
+class Solution {
+    // find greater in left and right then a[i] is min then formula = arr[i] * cnt cnt = (left * right)
+
+    int MOD = 1_000_000_007;
+    public int sumSubarrayMins(int[] arr) {
+        Stack<Integer> st= new Stack<>();
+        int n = arr.length;
+        long res = 0;
+        int prev[] = new int[n]; //how many element greater than a[i] in left
+        int next[] = new int[n]; //how many element greater than a[i] in right
+
+        for(int i = n-1; i >= 0; i--){
+            int cnt = 1;
+            while(!st.isEmpty() && arr[st.peek()] > arr[i]){
+                cnt += next[st.pop()];
+            }
+            next[i] = cnt;
+            st.push(i);
+        }
+        st.clear();
+
+        for(int i = 0; i < n; i++){
+            int cnt = 1;
+            while(!st.isEmpty() && arr[st.peek()] >= arr[i]){
+                cnt += prev[st.pop()];
+            }
+            prev[i] = cnt;
+            st.push(i);
+        }
+
+        for(int i = 0; i < n; i++){
+            res = (res + (long)arr[i] * next[i] * prev[i]) % MOD;
+        }
+        return (int)res;
+    }
+}
