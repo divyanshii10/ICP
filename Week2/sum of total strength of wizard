@@ -1,0 +1,47 @@
+https://leetcode.com/problems/sum-of-total-strength-of-wizards/submissions/1893977503/
+
+class Solution {
+	public int totalStrength(int[] strength) {
+		int n = strength.length;
+		int MOD = 1_000_000_007;
+        Stack<Integer> st = new Stack<Integer>();
+		long[] preSum = new long[n + 1];
+		long[] prePrefix = new long[n + 2];
+
+      
+		for (int i = 0; i < n; i++) {
+			preSum[i + 1] = (preSum[i] + strength[i]) % MOD;
+		}
+        
+		for (int i = 0; i <= n; i++) {
+			prePrefix[i + 1] = (prePrefix[i] + preSum[i]) % MOD;
+		}
+
+		int[] pse = new int[n];
+		for (int i = 0; i < strength.length; i++) {
+			while (!st.isEmpty() && strength[st.peek()] >= strength[i]) {
+				st.pop();
+			}
+			pse[i] = st.isEmpty() ? -1 : st.peek();
+			st.push(i);
+		}
+        st.clear();
+
+		int[] nse = new int[n];
+		for (int i = strength.length - 1; i >= 0 ; i--) {
+			while (!st.isEmpty() && strength[st.peek()] > strength[i]) {
+				st.pop();
+			}
+			nse[i] = st.isEmpty() ? n : st.peek();
+			st.push(i);
+		}
+
+		long ans = 0;
+		for (int i = 0; i < n; i++) {
+			ans += ((prePrefix[nse[i] + 1] - prePrefix[i + 1]) * (i - pse[i]) % MOD + MOD - (prePrefix[i + 1] - prePrefix[pse[i] + 1]) * (nse[i] - i) % MOD + MOD) * strength[i];
+			ans %= MOD;
+
+		}
+		return (int)ans;
+	}
+}
