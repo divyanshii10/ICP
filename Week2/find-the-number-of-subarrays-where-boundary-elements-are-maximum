@@ -1,0 +1,21 @@
+https://leetcode.com/problems/find-the-number-of-subarrays-where-boundary-elements-are-maximum/submissions/1894185487/
+
+class Solution {
+    public long numberOfSubarrays(int[] nums) {
+        int i, n = nums.length;
+        long ans = 0;
+        Stack<int[]> stack = new Stack<>();
+
+        for(i=0; i<n; i++){
+            while(!stack.isEmpty() && stack.peek()[0] < nums[i]){
+                stack.pop();
+            }
+            if (stack.isEmpty() || stack.peek()[0] != nums[i]){
+                stack.push(new int[]{nums[i],0});
+            }
+            stack.peek()[1]++;
+            ans += stack.peek()[1];
+        }
+        return ans;
+    }
+}
