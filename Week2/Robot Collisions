@@ -1,0 +1,43 @@
+https://leetcode.com/problems/robot-collisions/submissions/1893917918/
+
+class Solution {
+    public List<Integer> survivedRobotsHealths(int[] pos, int[] h, String dir) {
+        int n = pos.length;
+        Integer[] indices = new Integer[n];
+        for (int i = 0; i < n; i++) indices[i] = i;
+
+        Arrays.sort(indices, (a, b) -> Integer.compare(pos[a], pos[b]));
+
+        Stack<Integer> st = new Stack<>(); // Store indices of surviving 'R' robots
+
+        for(int i : indices){
+            char ch = dir.charAt(i);
+            
+            if(ch == 'R'){
+                st.push(i);
+            } else {
+                while (!st.isEmpty() && dir.charAt(st.peek()) == 'R' && h[i] > 0) {
+                    int top = st.peek();
+                    if(h[i] > h[top]){
+                        h[top] = 0; 
+                        h[i] -= 1;  
+                        st.pop();
+                    }else if (h[i] < h[top]){
+                        h[i] = 0;   
+                        h[top] -= 1;
+                    }else {
+                        h[i] = 0;  
+                        h[top] = 0;
+                        st.pop();
+                    }
+                }
+                if(h[i] > 0) st.push(i);
+            }
+        }
+        List<Integer> res = new ArrayList<>();
+        for(int it: h){
+           if(it > 0) res.add(it);
+        }
+        return res;
+    }
+}
