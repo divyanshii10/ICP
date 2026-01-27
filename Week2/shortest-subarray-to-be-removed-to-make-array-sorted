@@ -1,0 +1,22 @@
+https://leetcode.com/problems/shortest-subarray-to-be-removed-to-make-array-sorted/submissions/1893644261/
+
+
+class Solution {
+    public int findLengthOfShortestSubarray(int[] arr) {
+        int r = arr.length - 1; //check sorted
+        while(r > 0 && arr[r-1] <= arr[r]){
+            r--;
+        }
+    
+        int l = 0, ans = r;
+        while(l < r && ((l == 0) || arr[l] >= arr[l-1])){  //check sorted
+        // extra bade jo bachenge (outside range of l to r)
+            while(r < arr.length && arr[l] > arr[r]){
+                r++;
+            }
+            ans = Math.min(ans, r - l - 1);
+            l++;
+        }
+        return ans;
+    }
+}
