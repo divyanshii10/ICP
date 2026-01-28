@@ -1,0 +1,59 @@
+https://leetcode.com/problems/count-prime-gap-balanced-subarrays/submissions/1899423232/
+
+class Solution {
+    static int n = 50001;
+    static boolean sieve[] = new boolean[n];
+    static{
+        Arrays.fill(sieve, true);
+
+        sieve[0] = false;
+        sieve[1] = false;
+
+        for(int i = 2; i * i < n; i++){
+            if(!sieve[i]) continue;
+
+            for(int j = i * i; j < n; j += i){
+                sieve[j] = false;
+            }
+        }
+    }
+    public int primeSubarray(int[] nums, int k) {
+        Deque<Integer> max = new ArrayDeque<>();
+        Deque<Integer> min = new ArrayDeque<>();
+        ArrayList<Integer> plist = new ArrayList<>();
+        n = nums.length;
+
+        int s = 0, ans = 0;
+        for(int e = 0; e < n; e++){
+            if(sieve[nums[e]]){
+                plist.add(e);
+
+                while(!max.isEmpty() && nums[max.peekLast()] <= nums[e]){
+                    max.pollLast();
+                }
+                max.offerLast(e);
+                while(!min.isEmpty() && nums[min.peekLast()] > nums[e]){
+                    min.pollLast();
+                }
+                min.offerLast(e);
+                
+                // shrink
+                while(plist.size() >= 2 && nums[max.peekFirst()] - nums[min.peekFirst()] > k){
+                    if(sieve[nums[s]]){
+                        plist.remove(0);
+
+                        if(max.peekFirst() == s) max.pollFirst();
+                        if(min.peekFirst() == s) min.pollFirst();
+                    }
+                    s++;
+                }
+            }
+
+            if(plist.size() >= 2 && nums[max.peekFirst()] - nums[min.peekFirst()] <= k){
+                int idx = plist.get(plist.size() - 2);
+                ans += (idx - s + 1);
+            }
+        }
+        return ans;
+    }
+}
