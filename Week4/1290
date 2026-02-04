@@ -1,0 +1,12 @@
+https://leetcode.com/problems/convert-binary-number-in-a-linked-list-to-integer/submissions/1697058857/
+
+class Solution {
+    public int getDecimalValue(ListNode head) {
+        String binaryString = "";
+        while(head != null){
+            binaryString += head.val;
+            head = head.next;
+        }
+        return Integer.parseInt(binaryString, 2);
+    }
+}
