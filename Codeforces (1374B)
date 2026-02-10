@@ -1,0 +1,51 @@
+Problem link: https://codeforces.com/problemset/problem/1374/B
+
+Solution: 
+
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+int main() {
+	int t;
+	cin >> t;
+	while(t--){
+	    ll n; cin >> n;
+	    if(n == 1){
+	         cout << 0 << endl;
+	         continue;
+	    }
+	    
+	    ll cnt2 = 0, cnt3 = 0;
+	    while(n % 3 == 0){
+	        cnt3++;
+	        n /= 3;
+	    }
+	    
+	    while(n % 2 == 0){
+	        cnt2++;
+	        n /= 2;
+	    }
+	    
+	    if(n != 1 || cnt2 > cnt3){
+	        cout << -1 << endl;
+	    }else{
+	        cout << (cnt3 - cnt2) + cnt3 << endl;
+	    }
+	}
+}
+
+
+Intuition: 
+The question is asking to find the minimum no of operation to reach 1 either by dividing 6 (only if completely divisible) or by multiplying by 2 
+first of all if n == 1 it means no operation is required so we simply return 0 
+now to reach 1, we have two options either multiply by 2 means we are increasing pow of 2 right or if we divide by 6 it removes one 2 and one 3 so to reach 1 we must remove all powers
+So to remove all 3s, we must have enough 2s available. if too many 2s -> no way to remove extra ones in that case we'll cout (-1).
+Because multiply-by-2 only increases 2s.
+so we'll maintain cnt2, cnt3 if cnt2 > cnt3 it we need more 2s so we multiply 2 by (cnt3 - cnt2) times now powers are equal so operation needed = (cnt3 - cnt2)
+now to remove pow by /6 we need cnt3 operations so total operations = (cnt3 - cnt2) + cnt3
+
+Solution:
+1. if(n == 1) return 0;
+2. cnt pow of 2 and 3
+3. if(cnt2 > cnt2) return -1 else (cnt3 - cnt2) + cnt3;
