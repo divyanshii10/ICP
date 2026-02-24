@@ -1,0 +1,41 @@
+https://www.geeksforgeeks.org/problems/range-minimum-query/1
+
+/* The functions which
+builds the segment tree */
+class GfG {
+    static int st[];
+    
+    static void build(int s, int e, int i, int arr[]){
+        if(s == e){
+            st[i] = arr[s];
+            return;
+        }
+        
+        int mid = (s + e)/2;
+        build(s, mid, 2 *i, arr);
+        build(mid + 1, e, 2 *i + 1, arr);
+        
+        st[i] = Math.min(st[2* i], st[2*i + 1]);
+        
+    }
+    
+    static int query(int s, int e, int l, int r, int i){
+        if(s > r || e < l) return Integer.MAX_VALUE;
+        if(s >= l && e <= r) return st[i];
+        
+        int mid = (s + e)/2;
+        return Math.min(query(s, mid, l, r, 2 * i), query(mid + 1, e, l, r, 2 * i + 1));
+    }
+    public static int[] constructST(int arr[], int n) {
+        st = new int[4 * n];
+        build(0, n-1, 1, arr);
+        return st;
+    }
+
+    /* The functions returns the
+      min element in the range
+      from l and r */
+    public static int RMQ(int st[], int n, int l, int r) {
+       return query(0, n-1, l, r, 1);
+    }
+}
